@@ -1,6 +1,6 @@
 {
   "name": "claude-code-manager",
-  "version": "1.0.0",
+  "version": "6.0.0",
   "description": "Claude Code 本地管理工具 - 自动读取缓存数据，实现全套管理功能",
   "main": "main.js",
   "scripts": {

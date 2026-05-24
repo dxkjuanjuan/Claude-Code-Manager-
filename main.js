@@ -922,9 +922,17 @@ ipcMain.handle('get-conversation', async (_e, projectName, sessionId) => {
 ipcMain.handle('launch-claude', async (_e, cwd) => {
   try {
     const safeCwd = String(cwd || '').replace(/[&|;<>$`%!^(){}[\]]/g, '');
-    const options = { cwd: safeCwd || undefined, shell: true, detached: true, stdio: 'ignore' };
-    const child = spawn('claude', [], options);
-    child.unref();
+    if (process.platform === 'win32') {
+      // 在新 cmd 窗口中 cd 到目录并启动 claude
+      if (safeCwd) {
+        spawn('cmd.exe', ['/c', `start "" cmd.exe /k "cd /d "${safeCwd}" && claude"`], { detached: true, stdio: 'ignore', shell: false }).unref();
+      } else {
+        spawn('cmd.exe', ['/c', 'start "" cmd.exe /k "claude"'], { detached: true, stdio: 'ignore', shell: false }).unref();
+      }
+    } else {
+      const cdPart = safeCwd ? `cd '${safeCwd}' && ` : '';
+      spawn('osascript', ['-e', `tell application "Terminal" to do script "${cdPart}claude"`], { detached: true, stdio: 'ignore' }).unref();
+    }
     return { success: true, error: null };
   } catch (e) {
     return { success: false, error: e.message };
@@ -950,12 +958,13 @@ ipcMain.handle('get-settings', async () => {
   } catch { return null; }
 });
 
-// 12. Open in terminal
+// 12. Open in terminal — 启动 Claude Code
 ipcMain.handle('open-in-terminal', async (_e, cwd) => {
   try {
     const safeCwd = String(cwd).replace(/[&|;<>$`%!^(){}[\]]/g, '');
     if (process.platform === 'win32') {
-      spawn('cmd', ['/k', `cd /d "${safeCwd}" && claude`], { detached: true, stdio: 'ignore', shell: true }).unref();
+      // start 打开新 cmd 窗口，/k 保持窗口不关闭，cd /d 切换到指定目录，然后运行 claude
+      spawn('cmd.exe', ['/c', `start "" cmd.exe /k "cd /d "${safeCwd}" && claude"`], { detached: true, stdio: 'ignore', shell: false }).unref();
     } else {
       spawn('osascript', ['-e', `tell application "Terminal" to do script "cd '${safeCwd}' && claude"`], { detached: true, stdio: 'ignore' }).unref();
     }
@@ -970,7 +979,7 @@ ipcMain.handle('open-in-terminal-dangerous', async (_e, cwd) => {
   try {
     const safeCwd = String(cwd).replace(/[&|;<>$`%!^(){}[\]]/g, '');
     if (process.platform === 'win32') {
-      spawn('cmd', ['/k', `cd /d "${safeCwd}" && claude --dangerously-skip-permissions`], { detached: true, stdio: 'ignore', shell: true }).unref();
+      spawn('cmd.exe', ['/c', `start "" cmd.exe /k "cd /d "${safeCwd}" && claude --dangerously-skip-permissions"`], { detached: true, stdio: 'ignore', shell: false }).unref();
     } else {
       spawn('osascript', ['-e', `tell application "Terminal" to do script "cd '${safeCwd}' && claude --dangerously-skip-permissions"`], { detached: true, stdio: 'ignore' }).unref();
     }
