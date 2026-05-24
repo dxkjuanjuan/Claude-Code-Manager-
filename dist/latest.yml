@@ -1,8 +1,8 @@
 version: 6.0.0
 files:
   - url: Claude-Code-Manager-Setup-6.0.0.exe
-    sha512: //2Fp2+KH4q9b8XZNqfWct1yW1RdPQ9iAtkbjfPuSGO5qJ9BeOA6Vef9jXgd/HBglLSEYlTZenl3SaoUDSC24A==
-    size: 76411893
+    sha512: x749LA7RRpXvYrqJN2VhOksRkXAqUw1oHdhZE3H592SvDvw0xDRRRrRhnyU0FK5zgB7U0XS27wo8yZvof2IXrQ==
+    size: 76411799
 path: Claude-Code-Manager-Setup-6.0.0.exe
-sha512: //2Fp2+KH4q9b8XZNqfWct1yW1RdPQ9iAtkbjfPuSGO5qJ9BeOA6Vef9jXgd/HBglLSEYlTZenl3SaoUDSC24A==
-releaseDate: '2026-05-24T13:51:09.380Z'
+sha512: x749LA7RRpXvYrqJN2VhOksRkXAqUw1oHdhZE3H592SvDvw0xDRRRrRhnyU0FK5zgB7U0XS27wo8yZvof2IXrQ==
+releaseDate: '2026-05-24T14:14:19.880Z'

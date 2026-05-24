@@ -923,11 +923,10 @@ ipcMain.handle('launch-claude', async (_e, cwd) => {
   try {
     const safeCwd = String(cwd || '').replace(/[&|;<>$`%!^(){}[\]]/g, '');
     if (process.platform === 'win32') {
-      // 在新 cmd 窗口中 cd 到目录并启动 claude
       if (safeCwd) {
-        spawn('cmd.exe', ['/c', `start "" cmd.exe /k "cd /d "${safeCwd}" && claude"`], { detached: true, stdio: 'ignore', shell: false }).unref();
+        spawn('cmd', ['/k', 'claude'], { cwd: safeCwd, detached: true, stdio: 'ignore', shell: true }).unref();
       } else {
-        spawn('cmd.exe', ['/c', 'start "" cmd.exe /k "claude"'], { detached: true, stdio: 'ignore', shell: false }).unref();
+        spawn('cmd', ['/k', 'claude'], { detached: true, stdio: 'ignore', shell: true }).unref();
       }
     } else {
       const cdPart = safeCwd ? `cd '${safeCwd}' && ` : '';
@@ -963,8 +962,7 @@ ipcMain.handle('open-in-terminal', async (_e, cwd) => {
   try {
     const safeCwd = String(cwd).replace(/[&|;<>$`%!^(){}[\]]/g, '');
     if (process.platform === 'win32') {
-      // start 打开新 cmd 窗口，/k 保持窗口不关闭，cd /d 切换到指定目录，然后运行 claude
-      spawn('cmd.exe', ['/c', `start "" cmd.exe /k "cd /d "${safeCwd}" && claude"`], { detached: true, stdio: 'ignore', shell: false }).unref();
+      spawn('cmd', ['/k', 'claude'], { cwd: safeCwd, detached: true, stdio: 'ignore', shell: true }).unref();
     } else {
       spawn('osascript', ['-e', `tell application "Terminal" to do script "cd '${safeCwd}' && claude"`], { detached: true, stdio: 'ignore' }).unref();
     }
@@ -979,7 +977,7 @@ ipcMain.handle('open-in-terminal-dangerous', async (_e, cwd) => {
   try {
     const safeCwd = String(cwd).replace(/[&|;<>$`%!^(){}[\]]/g, '');
     if (process.platform === 'win32') {
-      spawn('cmd.exe', ['/c', `start "" cmd.exe /k "cd /d "${safeCwd}" && claude --dangerously-skip-permissions"`], { detached: true, stdio: 'ignore', shell: false }).unref();
+      spawn('cmd', ['/k', 'claude --dangerously-skip-permissions'], { cwd: safeCwd, detached: true, stdio: 'ignore', shell: true }).unref();
     } else {
       spawn('osascript', ['-e', `tell application "Terminal" to do script "cd '${safeCwd}' && claude --dangerously-skip-permissions"`], { detached: true, stdio: 'ignore' }).unref();
     }
