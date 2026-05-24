@@ -1,0 +1,16 @@
+node_modules/
+dist/
+out/
+.DS_Store
+Thumbs.db
+*.log
+.env
+# Screenshots (too large, not needed in repo)
+*.png
+!build/icon.png
+!renderer/claude-icon.png
+!renderer/claudecode-icon.png
+!renderer/claudecode-icon-transparent.png
+# Old test scripts
+screenshot*.js
+test-*.js
